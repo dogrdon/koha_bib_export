@@ -13,6 +13,12 @@ export_path = '/cgi-bin/koha/tools/export.pl'
 
 url = domain + export_path
 
+total = 100
+incre = 10
+curr = 1
+stop = 10
+
+
 b = mechanize.Browser()
 
 b.addheaders = headers
@@ -29,12 +35,22 @@ b["password"] = passwd
 
 b.submit()
 
-b.select_form(nr=3)
 
-b["StartingBiblionumber"] = '2'
-b["EndingBiblionumber"] = '4'
+while stop < total + 1:
 
-data = b.submit()
+	b.select_form(nr=3)
+	
 
-res = data.read()
-print res
+	b["StartingBiblionumber"] = str(curr)
+	b["EndingBiblionumber"] = str(stop)
+
+	data = b.submit()
+
+	res = data.read()
+	print curr, stop, '====\n', res, '====\n' #this is a string that can be saved to marc or xml
+
+	curr = stop + 1
+	stop += incre
+
+	b.open(url)
+
