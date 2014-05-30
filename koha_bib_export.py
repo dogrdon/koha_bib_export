@@ -8,10 +8,8 @@ import time
 
 '''
 TODO:
-- Make sure the script gets the extra records at the end
-- switch for XML or marc
+- Make sure the script gets the extra records at the end - or be lazy and just round up the total
 - Error handling, currenlty there is none
-- Track how long it is taking to run the script "Script finished, it took __ hours/min to run"
 '''
 
 headers = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0')]
@@ -29,10 +27,11 @@ if not os.path.exists(data_path):
 
 url = domain + export_path
 
-total = 165
-incre = 10
+total = 160
+#total = 266000
+incre = 50
 curr = 1
-stop = 10
+stop = 50
 
 start_time = time.time()
 
@@ -62,9 +61,10 @@ while stop < total + 1:
 	b["StartingBiblionumber"] = str(curr)
 	b["EndingBiblionumber"] = str(stop)
 	if xml_status == 1:
-		#set xml status
+		b["output_format"] = ['xml']
+	else:
 		pass
-
+		
 	print 'Getting export data records %s - %s ready, this may take a moment...' % (str(curr), str(stop))
 
 	data = b.submit()
@@ -75,7 +75,11 @@ while stop < total + 1:
 
 	#print curr, stop, '====\n', res, '====\n' #this is a string that can be saved to marc or xml
 
-	filename = data_path+'export-'+ str(curr) + '-' + str(stop) + '.mrc'
+	if xml_status == 1:
+		filename = data_path+'export-'+ str(curr) + '-' + str(stop) + '.xml'
+	else:
+		filename = data_path+'export-'+ str(curr) + '-' + str(stop) + '.mrc'
+
 
 	with open(filename, 'w') as f:
 		f.write(res)
