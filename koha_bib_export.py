@@ -8,10 +8,8 @@ import time
 
 '''
 TODO:
-- Log information so people know where the script is at in the export
 - Make sure the script gets the extra records at the end
 - switch for XML or marc
-- Better directory creation so that if there is an error, it fails/picksup gracefully
 - Error handling, currenlty there is none
 - Track how long it is taking to run the script "Script finished, it took __ hours/min to run"
 '''
@@ -21,8 +19,9 @@ headers = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gec
 user = keys.user
 passwd = keys.passwd
 domain = keys.domain
+xml_status = keys.xml_status
 export_path = '/cgi-bin/koha/tools/export.pl'
-data_path = './data/'+ time.strftime("%Y-%m-%d") + '/'
+data_path = './data/'+ time.strftime("%Y-%m-%d_%H%M%S") + '/'
 
 '''create path'''
 if not os.path.exists(data_path):
@@ -30,10 +29,12 @@ if not os.path.exists(data_path):
 
 url = domain + export_path
 
-total = 50000
-incre = 5000
+total = 165
+incre = 10
 curr = 1
-stop = 5000
+stop = 10
+
+start_time = time.time()
 
 
 b = mechanize.Browser()
@@ -60,16 +61,19 @@ while stop < total + 1:
 
 	b["StartingBiblionumber"] = str(curr)
 	b["EndingBiblionumber"] = str(stop)
+	if xml_status == 1:
+		#set xml status
+		pass
 
-	print 'Getting export data ready, this may take a moment...'
+	print 'Getting export data records %s - %s ready, this may take a moment...' % (str(curr), str(stop))
 
 	data = b.submit()
 
-	print 'Have a nice coffee?'
+	print 'Writing to server.'
 
 	res = data.read()
 
-	print curr, stop, '====\n', res, '====\n' #this is a string that can be saved to marc or xml
+	#print curr, stop, '====\n', res, '====\n' #this is a string that can be saved to marc or xml
 
 	filename = data_path+'export-'+ str(curr) + '-' + str(stop) + '.mrc'
 
@@ -81,4 +85,6 @@ while stop < total + 1:
 	stop += incre
 
 	b.open(url)
+
+print time.time() - start_time, "seconds to export %s bibliographic records" %(total)
 
