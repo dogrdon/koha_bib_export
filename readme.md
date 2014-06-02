@@ -18,9 +18,11 @@ This script could be done way more flexibly, with more configurability, but I do
 
 ####Notes
 
-Again, this script is for automating the process of downloading all records and is not configured to handling customized chunks in between (though if you were to set the `start` variable to something other than `1`, it would start at that bib record, of course)
+Again, this script is for automating the process of downloading all records and is not configured to handling customized chunks in between (though if you were to set the `start` variable to something other than `1`, it would start at that bib record, of course. Change the corresponding `stop` variable as well)
 
 The way this handles total records in increments is pretty lazy. So if you have 246000 bibliographic records, and you set the increment to 5000, it is going to miss those last 1000. You can avoid this by rounding up the total number of records by a magnitude of the increment you've set. So if you have 246000 records, just set the `total` to 250000.  
+
+**.mrc vs .xml** - be aware that should you choose to output as XML rather than MARC, the data read into the buffer will be much larger as the white space probably triples the size of the data returned. May need to play around with increments in the case this becomes a problem.
 
 
 
