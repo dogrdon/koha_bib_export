@@ -1,4 +1,5 @@
 venv/
 keys.py
+koha_config.py
 *.pyc
 data/

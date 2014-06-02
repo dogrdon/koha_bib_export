@@ -2,7 +2,7 @@
 
 import base64
 import mechanize
-import keys
+import koha_koha_config
 import os
 import time
 
@@ -14,10 +14,10 @@ TODO:
 
 headers = [('User-agent', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0')]
 
-user = keys.user
-passwd = keys.passwd
-domain = keys.domain
-xml_status = keys.xml_status
+user = koha_config.user
+passwd = koha_config.passwd
+domain = koha_config.domain
+xml_status = koha_config.xml_status
 export_path = '/cgi-bin/koha/tools/export.pl'
 data_path = './data/'+ time.strftime("%Y-%m-%d_%H%M%S") + '/'
 
@@ -27,11 +27,13 @@ if not os.path.exists(data_path):
 
 url = domain + export_path
 
-total = 160
+total = koha_config.total
 #total = 266000
-incre = 50
+increment = koha_config.increment #the increments in which bib records will be downloaded in i.e. 5000 means it will export by 5000 bibliographic records at a time.
 curr = 1
-stop = 50
+stop = increment
+
+#if total % incre is not 0 well, ....
 
 start_time = time.time()
 
