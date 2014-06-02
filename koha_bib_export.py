@@ -28,7 +28,7 @@ url = domain + export_path
 total = koha_config.total
 increment = koha_config.increment
 curr = 1
-stop = increment
+stop = curr + increment - 1
 
 start_time = time.time()
 
