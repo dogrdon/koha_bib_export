@@ -14,6 +14,7 @@ user = koha_config.user
 passwd = koha_config.passwd
 domain = koha_config.domain
 xml_status = koha_config.xml_status
+no_items = koha_config.no_items
 export_path = '/cgi-bin/koha/tools/export.pl'
 data_path = './data/'+ time.strftime("%Y-%m-%d_%H%M%S") + '/'
 
@@ -40,7 +41,7 @@ b.set_handle_robots(False) #seems to be the only surefire way to get around the 
 #go bot, go!
 b.open(url)
 
-#select form (not sure if this would be different for other versions of koha - this is tested on PTFS/Liblime Academic Koha 5.8)
+#select form (not sure if this would be different for other versions of koha - this is tested on PTFS/Liblime Academic Koha 5.8 and Community Koha 3.16)
 b.select_form(nr=0)
 
 #authenticate
@@ -59,6 +60,11 @@ while stop < total + 1:
 	b["EndingBiblionumber"] = str(stop)
 	if xml_status == 1:
 		b["output_format"] = ['xml']
+	else:
+		pass
+	#check the dont_export_item box if you don't want items exported
+	if no_items == 1:
+		b.form.find_control(name="dont_export_item").items[0].selected = True
 	else:
 		pass
 		
