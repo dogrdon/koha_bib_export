@@ -72,7 +72,7 @@ while stop < total + 1:
 
 	data = b.submit()
 
-	print 'Writing to server.'
+	print 'Writing to filesystem...'
 
 	res = data.read()
 
